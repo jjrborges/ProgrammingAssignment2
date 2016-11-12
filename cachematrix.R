@@ -1,7 +1,7 @@
-## Put comments here that give an overall description of what your
-## functions do
+## This is solution by Guangming Lang at http://masterr.org/r/how-to-cache-a-matrix-inversion-in-r/
+## because I can't do it for myself at this moment of this course
 
-## Write a short comment describing this function
+
 
 makeCacheMatrix <- function(x = matrix()) {
         ## @x: a square invertible matrix
@@ -54,7 +54,7 @@ cacheSolve <- function(x, ...) {
         return(inv)
 }
 
-testing = function(mat){
+test = function(mat){
         ## @mat: an invertible matrix
         
         temp = makeCacheMatrix(mat)
@@ -73,4 +73,4 @@ testing = function(mat){
 set.seed(1110201)
 r = rnorm(1000000)
 mat1 = matrix(r, nrow=1000, ncol=1000)
-testing(mat1)
+test(mat1)

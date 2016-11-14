@@ -1,76 +1,41 @@
-## This is solution by Guangming Lang at http://masterr.org/r/how-to-cache-a-matrix-inversion-in-r/
-## because I can't do it for myself at this moment of this course
-
-
-
-makeCacheMatrix <- function(x = matrix()) {
-        ## @x: a square invertible matrix
-        ## return: a list containing functions to
-        ##              1. set the matrix
-        ##              2. get the matrix
-        ##              3. set the inverse
-        ##              4. get the inverse
-        ##         this list is used as the input to cacheSolve()
-        
-        inv = NULL
-        set = function(y) {
-                # use `<<-` to assign a value to an object in an environment 
-                # different from the current environment. 
-                x <<- y
-                inv <<- NULL
+makeCacheMatrix <- function(z = matrix(rnorm(1000), nrow=100,ncol=100)) {
+        mat <- NULL
+        set <- function(y) {
+                z <<- y
+                m <<- NULL
         }
-        get = function() x
-        setinv = function(inverse) inv <<- inverse 
-        getinv = function() inv
-        list(set=set, get=get, setinv=setinv, getinv=getinv)
+        get <- function() z
+        setinv <- function(inverse) mat <<- inverse
+        getinv <- function() mat
+        list(set = set, get = get,setinv = setinv, getinv = getinv)
 }
 
 
-
-
-
-## Write a short comment describing this function
-
-cacheSolve <- function(x, ...) {
-        ## @x: output of makeCacheMatrix()
-        ## return: inverse of the original matrix input to makeCacheMatrix()
-        
-        inv = x$getinv()
-        
-        # if the inverse has already been calculated
-        if (!is.null(inv)){
-                # get it from the cache and skips the computation. 
-                message("getting cached data")
-                return(inv)
+cacheSolve <- function(z, ...) {
+        m <- z$getinverse()
+        if(!is.null(m)) {sol
+                message("it is cached data")
+                return(m)
         }
-        
-        # otherwise, calculates the inverse 
-        mat.data = x$get()
-        inv = solve(mat.data, ...)
-        
-        # sets the value of the inverse in the cache via the setinv function.
-        x$setinv(inv)
-        
-        return(inv)
+        data <- z$get()
+        m <- inverse(data, ...)
+        x$setinv(m)
+        m
 }
 
-test = function(mat){
-        ## @mat: an invertible matrix
-        
-        temp = makeCacheMatrix(mat)
-        
-        start.time = Sys.time()
-        cacheSolve(temp)
-        dur = Sys.time() - start.time
-        print(dur)
-        
-        start.time = Sys.time()
-        cacheSolve(temp)
-        dur = Sys.time() - start.time
-        print(dur)
-}
+# testing time to procesing function and cache
+start.time <- Sys.time()
+makeCacheMatrix
+end.time <- Sys.time()
+time.taken <- end.time - start.time
+time.taken
 
-set.seed(1110201)
-r = rnorm(1000000)
-mat1 = matrix(r, nrow=1000, ncol=1000)
-test(mat1)
+start.time1 <- Sys.time()
+cacheSolve
+end.time1 <- Sys.time()
+time.taken1 <- end.time1 - start.time1
+time.taken1
+
+timediff <- time.taken - time.taken1
+timediff
+
